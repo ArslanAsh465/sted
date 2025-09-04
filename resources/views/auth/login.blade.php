@@ -1,39 +1,41 @@
 @extends('auth.layout.app')
 
 @section('content')
-<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
-        @include('auth.components.heading', ['level' => 'h3', 'class' => 'mb-4 text-center', 'variant' => 'primary', 'text' => 'Login'])
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+            
+            {{-- Heading --}}
+            <x-heading level="h3" class="mb-4 text-center" variant="primary" text="Login" />
 
-        <form method="POST" action="#">
-            @csrf
+            {{-- Login Form --}}
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
 
-            @include('auth.components.input', [
-                'type' => 'text',
-                'name' => 'username',
-                'label' => 'Username',
-                'placeholder' => 'Enter username',
-                'value' => old('username'),
-                'required' => true,
-                'id' => 'username',
-                'class' => 'mb-4'
-            ])
+                {{-- Username --}}
+                <div class="mb-3">
+                    <x-label for="username" text="Username" class="form-label" />
+                    <x-input name="username" id="username" placeholder="Enter your username" required />
+                </div>
 
-            @include('auth.components.input', [
-                'type' => 'password',
-                'name' => 'password',
-                'label' => 'Password',
-                'placeholder' => 'Enter password',
-                'required' => true
-            ])
+                {{-- Password --}}
+                <div class="mb-3">
+                    <x-label for="password" text="Password" class="form-label" />
+                    <x-input type="password" name="password" id="password" placeholder="Enter your password" required />
+                </div>
 
-            @include('auth.components.button', [
-                'type' => 'submit',
-                'text' => 'Login',
-                'variant' => 'primary',
-                'class' => 'w-100 mt-3',
-            ])
-        </form>
+                {{-- Submit Button --}}
+                <div class="mt-3">
+                    <x-button type="submit" text="Login" variant="primary" class="w-100" />
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <span>Don't have an account?</span>
+                <x-link href="{{ route('registerPage') }}" text="Register" variant="primary" class="text-decoration-none" />
+            </div>
+        </div>
     </div>
-</div>
+
+    {{-- SweetAlert notification --}}
+    <x-alert />
 @endsection
