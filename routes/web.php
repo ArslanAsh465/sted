@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\Admin\AdminDashboardController;
 use App\Http\Controllers\Backend\Moderator\ModeratorDashboardController;
@@ -9,10 +10,19 @@ use App\Http\Controllers\Backend\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Backend\Parent\ParentDashboardController;
 use App\Http\Controllers\Backend\Student\StudentDashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Frontend Routes
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/exams', [HomeController::class, 'exams'])->name('exams');
+Route::get('/news', [HomeController::class, 'news'])->name('news');
+Route::get('/rankings', [HomeController::class, 'rankings'])->name('rankings');
+Route::get('/downloads', [HomeController::class, 'downloads'])->name('downloads');
+Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
+Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
 
+// Auth Routes
 // Register
 Route::get('/register', [AuthController::class, 'registerForm'])->name('registerForm');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -24,6 +34,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
+// Backend Routes
 // Admin
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
