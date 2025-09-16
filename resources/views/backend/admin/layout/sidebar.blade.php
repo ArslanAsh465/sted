@@ -209,13 +209,13 @@
                 <div class="collapse {{ request()->routeIs('admin.news.*') ? 'show' : '' }}" id="newsMenu">
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.news.index') }}" class="nav-link {{ request()->routeIs('admin.news.index') ? 'active' : '' }}">
                                 List News
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.news.create') ? 'active' : '' }}">
-                                Create News
+                            <a href="{{ route('admin.news.create') }}" class="nav-link {{ request()->routeIs('admin.news.create') ? 'active' : '' }}">
+                                Add News
                             </a>
                         </li>
                     </ul>
@@ -284,12 +284,12 @@
                 <div class="collapse {{ request()->routeIs('admin.gallery.*') ? 'show' : '' }}" id="galleryMenu">
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.gallery.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.gallery.index') }}" class="nav-link {{ request()->routeIs('admin.gallery.index') ? 'active' : '' }}">
                                 List Gallery
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.gallery.create') ? 'active' : '' }}">
+                            <a href="{{ route('admin.gallery.create') }}" class="nav-link {{ request()->routeIs('admin.gallery.create') ? 'active' : '' }}">
                                 Upload / Add New
                             </a>
                         </li>

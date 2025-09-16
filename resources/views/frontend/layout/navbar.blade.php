@@ -7,14 +7,14 @@
 
     <nav id="navmenu" class="navmenu">
       <ul>
-        <li><a href="{{ route('home') }}" class="active">Home</a></li>
-        <li><a href="{{ route('exams') }}">Exams</a></li>
-        <li><a href="{{ route('news') }}">News</a></li>
-        <li><a href="{{ route('rankings') }}">Rankings</a></li>
-        <li><a href="{{ route('downloads') }}">Downloads</a></li>
-        <li><a href="{{ route('gallery') }}">Gallery</a></li>
-        <li><a href="{{ route('about') }}">About</a></li>
-        <li><a href="{{ route('contact') }}">Contact</a></li>
+        <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
+        <li><a href="{{ route('exams') }}" class="{{ request()->routeIs('exams') ? 'active' : '' }}">Exams</a></li>
+        <li><a href="{{ route('news') }}" class="{{ request()->routeIs('news') ? 'active' : '' }}">News</a></li>
+        <li><a href="{{ route('rankings') }}" class="{{ request()->routeIs('rankings') ? 'active' : '' }}">Rankings</a></li>
+        <li><a href="{{ route('downloads') }}" class="{{ request()->routeIs('downloads') ? 'active' : '' }}">Downloads</a></li>
+        <li><a href="{{ route('gallery') }}" class="{{ request()->routeIs('gallery') ? 'active' : '' }}">Gallery</a></li>
+        <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a></li>
+        <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
       </ul>
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>

@@ -11,6 +11,8 @@ use App\Http\Controllers\Backend\Admin\AdminInstitutesController;
 use App\Http\Controllers\Backend\Admin\AdminTeachersController;
 use App\Http\Controllers\Backend\Admin\AdminParentsController;
 use App\Http\Controllers\Backend\Admin\AdminStudentsController;
+use App\Http\Controllers\Backend\Admin\AdminNewsController;
+use App\Http\Controllers\Backend\Admin\AdminGalleryController;
 
 use App\Http\Controllers\Backend\Moderator\ModeratorDashboardController;
 use App\Http\Controllers\Backend\Institute\InstituteDashboardController;
@@ -106,6 +108,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/{id}/edit', [AdminStudentsController::class, 'edit'])->name('edit');
         Route::put('/{id}', [AdminStudentsController::class, 'update'])->name('update');
         Route::delete('/{id}', [AdminStudentsController::class, 'destroy'])->name('destroy');
+    });
+
+    // News
+    Route::prefix('news')->name('news.')->group(function () {
+        Route::get('/', [AdminNewsController::class, 'index'])->name('index');
+        Route::get('/create', [AdminNewsController::class, 'create'])->name('create');
+        Route::post('/', [AdminNewsController::class, 'store'])->name('store');
+        Route::delete('/{id}', [AdminNewsController::class, 'destroy'])->name('destroy');
+    });
+
+    // Gallery
+    Route::prefix('gallery')->name('gallery.')->group(function () {
+        Route::get('/', [AdminGalleryController::class, 'index'])->name('index');
+        Route::get('/create', [AdminGalleryController::class, 'create'])->name('create');
+        Route::post('/', [AdminGalleryController::class, 'store'])->name('store');
+        Route::delete('/{id}', [AdminGalleryController::class, 'destroy'])->name('destroy');
     });
 });
 

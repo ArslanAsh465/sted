@@ -33,7 +33,9 @@
     @include('frontend.layout.navbar')
 
     <main class="main">
-        @yield('content')
+        <div class="container">
+            @yield('content')
+        </div>
     </main>
 
     @include('frontend.layout.footer')

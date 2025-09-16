@@ -4,9 +4,15 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use App\Models\News;
+use App\Models\Gallery;
 
 class HomeController extends Controller
 {
+    protected $data = [];
+
     // Home Page
     public function home()
     {
@@ -22,7 +28,19 @@ class HomeController extends Controller
     // News Page
     public function news()
     {
-        return view('frontend.news');
+        $today = Carbon::today()->toDateString();
+
+        $this->data['news'] = News::where('status', '1')
+            ->where(function ($query) use ($today) {
+                $query->whereNull('start_time')->orWhere('start_time', '<=', $today);
+            })
+            ->where(function ($query) use ($today) {
+                $query->whereNull('end_time')->orWhere('end_time', '>=', $today);
+            })
+            ->latest()
+            ->get();
+
+        return view('frontend.news', $this->data);
     }
 
     // Rankings Page
@@ -40,7 +58,19 @@ class HomeController extends Controller
     // Gallery Page
     public function gallery()
     {
-        return view('frontend.gallery');
+        $today = Carbon::today()->toDateString();
+
+        $this->data['galleries'] = Gallery::where('status', '1')
+            ->where(function ($query) use ($today) {
+                $query->whereNull('start_time')->orWhere('start_time', '<=', $today);
+            })
+            ->where(function ($query) use ($today) {
+                $query->whereNull('end_time')->orWhere('end_time', '>=', $today);
+            })
+            ->latest()
+            ->get();
+
+        return view('frontend.gallery', $this->data);
     }
 
     // About Page
