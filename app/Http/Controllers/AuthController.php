@@ -15,6 +15,10 @@ class AuthController extends Controller
 {
     public function registerForm()
     {
+        if (Auth::check()) {
+            return $this->redirectToDashboard(Auth::user());
+        }
+
         return view('auth.register');
     }
 
@@ -55,6 +59,10 @@ class AuthController extends Controller
 
     public function loginForm()
     {
+        if (Auth::check()) {
+            return $this->redirectToDashboard(Auth::user());
+        }
+
         return view('auth.login');
     }
 
@@ -105,5 +113,25 @@ class AuthController extends Controller
         return redirect()->route('loginForm')
             ->with('alert_type', 'success')
             ->with('alert_message', 'You have been logged out.');
+    }
+
+    private function redirectToDashboard(User $user)
+    {
+        $roleRedirects = [
+            Constants::ROLE_ADMIN     => 'admin.dashboard',
+            Constants::ROLE_MODERATOR => 'moderator.dashboard',
+            Constants::ROLE_INSTITUTE => 'institute.dashboard',
+            Constants::ROLE_TEACHER   => 'teacher.dashboard',
+            Constants::ROLE_PARENT    => 'parent.dashboard',
+            Constants::ROLE_STUDENT   => 'student.dashboard',
+        ];
+
+        $routeName = $roleRedirects[(int)$user->role] ?? null;
+
+        if ($routeName && Route::has($routeName)) {
+            return redirect()->route($routeName);
+        }
+
+        return redirect('/'); // fallback if no route matches
     }
 }

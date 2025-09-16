@@ -15,13 +15,18 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('parent_id');
+            $table->string('ssid')->unique();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique()->nullable();
             $table->string('roll_no')->unique();
             $table->date('date_of_birth');
+
             $table->string('address');
-            $table->string('parent_contact');
+            $table->integer('city_id');
+            $table->integer('state_id');
+            $table->integer('country_id');
+            $table->integer('postal_code');
 
             $table->timestamps();
         });

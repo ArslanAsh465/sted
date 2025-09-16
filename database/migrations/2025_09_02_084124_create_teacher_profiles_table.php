@@ -15,13 +15,18 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('institute_id');
+            $table->string('stid')->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
-            $table->string('email')->unique();
             $table->string('qualification');
             $table->string('specialization');
             $table->string('address');
+            $table->integer('city_id');
+            $table->integer('state_id');
+            $table->integer('country_id');
+            $table->integer('postal_code');
 
             $table->timestamps();
         });

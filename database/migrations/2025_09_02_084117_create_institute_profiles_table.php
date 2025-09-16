@@ -16,10 +16,17 @@ return new class extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->string('address');
-            $table->string('phone');
-            $table->string('email')->unique();
+            $table->string('principal_name');
+            $table->string('mobile_no');
+            $table->string('whatsapp_no');
             $table->string('website');
+
+            $table->string('address');
+            $table->integer('city_id');
+            $table->integer('state_id');
+            $table->integer('country_id');
+            $table->integer('postal_code');
+
             $table->string('registration_number')->nullable();
 
             $table->timestamps();

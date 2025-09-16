@@ -3,7 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\AuthController;
+// Admin Controller
 use App\Http\Controllers\Backend\Admin\AdminDashboardController;
+use App\Http\Controllers\Backend\Admin\AdminAdminsController;
+use App\Http\Controllers\Backend\Admin\AdminModeratorsController;
+use App\Http\Controllers\Backend\Admin\AdminInstitutesController;
+use App\Http\Controllers\Backend\Admin\AdminTeachersController;
+use App\Http\Controllers\Backend\Admin\AdminParentsController;
+use App\Http\Controllers\Backend\Admin\AdminStudentsController;
+
 use App\Http\Controllers\Backend\Moderator\ModeratorDashboardController;
 use App\Http\Controllers\Backend\Institute\InstituteDashboardController;
 use App\Http\Controllers\Backend\Teacher\TeacherDashboardController;
@@ -37,7 +45,68 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // Backend Routes
 // Admin
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    //Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+
+    // Admins
+    Route::prefix('admins')->name('admins.')->group(function () {
+        Route::get('/', [AdminAdminsController::class, 'index'])->name('index');
+        Route::get('/create', [AdminAdminsController::class, 'create'])->name('create');
+        Route::post('/', [AdminAdminsController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminAdminsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminAdminsController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminAdminsController::class, 'destroy'])->name('destroy');
+    });
+
+    // Moderators
+    Route::prefix('moderators')->name('moderators.')->group(function () {
+        Route::get('/', [AdminModeratorsController::class, 'index'])->name('index');
+        Route::get('/create', [AdminModeratorsController::class, 'create'])->name('create');
+        Route::post('/', [AdminModeratorsController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminModeratorsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminModeratorsController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminModeratorsController::class, 'destroy'])->name('destroy');
+    });
+
+    // Institutes
+    Route::prefix('institutes')->name('institutes.')->group(function () {
+        Route::get('/', [AdminInstitutesController::class, 'index'])->name('index');
+        Route::get('/create', [AdminInstitutesController::class, 'create'])->name('create');
+        Route::post('/', [AdminInstitutesController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminInstitutesController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminInstitutesController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminInstitutesController::class, 'destroy'])->name('destroy');
+    });
+
+    // Teachers
+    Route::prefix('teachers')->name('teachers.')->group(function () {
+        Route::get('/', [AdminTeachersController::class, 'index'])->name('index');
+        Route::get('/create', [AdminTeachersController::class, 'create'])->name('create');
+        Route::post('/', [AdminTeachersController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminTeachersController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminTeachersController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminTeachersController::class, 'destroy'])->name('destroy');
+    });
+
+    // Parents
+    Route::prefix('parents')->name('parents.')->group(function () {
+        Route::get('/', [AdminParentsController::class, 'index'])->name('index');
+        Route::get('/create', [AdminParentsController::class, 'create'])->name('create');
+        Route::post('/', [AdminParentsController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminParentsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminParentsController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminParentsController::class, 'destroy'])->name('destroy');
+    });
+
+    // Students
+    Route::prefix('students')->name('students.')->group(function () {
+        Route::get('/', [AdminStudentsController::class, 'index'])->name('index');
+        Route::get('/create', [AdminStudentsController::class, 'create'])->name('create');
+        Route::post('/', [AdminStudentsController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminStudentsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminStudentsController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminStudentsController::class, 'destroy'])->name('destroy');
+    });
 });
 
 // Moderator

@@ -54,10 +54,17 @@ class TestSeeder extends Seeder
             InstituteProfile::create([
                 'user_id' => $user->id,
                 'name' => "Institute $i",
-                'address' => "Block $i, City Center",
-                'phone' => "03001234$i$i",
-                'email' => "institute$i@sted.com",
+                'principal_name' => "Principal $i",
+                'mobile_no' => "03001234$i$i",
+                'whatsapp_no' => "03001234$i$i",
                 'website' => "www.institute$i.com",
+                'address' => "Block $i, City Center",
+
+                'city_id' => rand(1, 57),
+                'state_id' => 1,
+                'country_id' => 1,
+                'postal_code' => 12345 + $i,
+
                 'registration_number' => "REG00$i",
             ]);
         }
@@ -75,13 +82,17 @@ class TestSeeder extends Seeder
 
             TeacherProfile::create([
                 'user_id' => $user->id,
+                'institute_id' => $i,
                 'first_name' => "TeacherFirst$i",
                 'last_name' => "TeacherLast$i",
                 'phone' => "03111234$i$i",
-                'email' => "teacher$i@sted.com",
                 'qualification' => "MSc Subject $i",
                 'specialization' => "Specialization $i",
                 'address' => "Street $i, Education Town",
+                'city_id' => rand(1, 57),
+                'state_id' => 1,
+                'country_id' => 1,
+                'postal_code' => 54321 + $i,
             ]);
         }
 
@@ -100,9 +111,12 @@ class TestSeeder extends Seeder
                 'user_id' => $user->id,
                 'first_name' => "ParentFirst$i",
                 'last_name' => "ParentLast$i",
-                'email' => "parent$i@sted.com",
-                'mobile_no' => "03221234$i$i",
+                'phone' => "03221234$i$i",
                 'address' => "House $i, Family Block",
+                'city_id' => rand(1, 57),
+                'state_id' => 1,
+                'country_id' => 1,
+                'postal_code' => 10000 + $i,
             ]);
         }
 
@@ -119,13 +133,16 @@ class TestSeeder extends Seeder
 
             StudentProfile::create([
                 'user_id' => $user->id,
+                'parent_id' => $i,
                 'first_name' => "StudentFirst$i",
                 'last_name' => "StudentLast$i",
-                'email' => "student$i@sted.com",
                 'roll_no' => "ROLL00$i",
                 'date_of_birth' => now()->subYears(15 + $i)->format('Y-m-d'),
                 'address' => "Street $i, Student Colony",
-                'parent_contact' => "03221234$i$i",
+                'city_id' => rand(1, 57),
+                'state_id' => 1,
+                'country_id' => 1,
+                'postal_code' => 10000 + $i,
             ]);
         }
     }

@@ -47,4 +47,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relations
+    public function institute()
+    {
+        return $this->hasOne(InstituteProfile::class, 'user_id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(TeacherProfile::class, 'user_id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne(ParentProfile::class, 'user_id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(StudentProfile::class, 'user_id');
+    }
 }
