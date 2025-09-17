@@ -19,7 +19,7 @@
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
 
-    <a class="btn-getstarted" href="{{ route('loginForm') }}">Log In</a>
+    <a class="btn-getstarted" href="{{ route('loginForm') }}">{{ auth()->check() ? "Dashboard" : "Log In" }}</a>
 
   </div>
 </header>

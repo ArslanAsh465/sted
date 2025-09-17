@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\Admin\AdminTeachersController;
 use App\Http\Controllers\Backend\Admin\AdminParentsController;
 use App\Http\Controllers\Backend\Admin\AdminStudentsController;
 use App\Http\Controllers\Backend\Admin\AdminNewsController;
+use App\Http\Controllers\Backend\Admin\AdminDownloadsController;
 use App\Http\Controllers\Backend\Admin\AdminGalleryController;
 
 use App\Http\Controllers\Backend\Moderator\ModeratorDashboardController;
@@ -115,14 +116,21 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/', [AdminNewsController::class, 'index'])->name('index');
         Route::get('/create', [AdminNewsController::class, 'create'])->name('create');
         Route::post('/', [AdminNewsController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminNewsController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminNewsController::class, 'update'])->name('update');
         Route::delete('/{id}', [AdminNewsController::class, 'destroy'])->name('destroy');
     });
+
+    // Downloads
+    Route::resource('downloads', AdminDownloadsController::class)->names('downloads');
 
     // Gallery
     Route::prefix('gallery')->name('gallery.')->group(function () {
         Route::get('/', [AdminGalleryController::class, 'index'])->name('index');
         Route::get('/create', [AdminGalleryController::class, 'create'])->name('create');
         Route::post('/', [AdminGalleryController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminGalleryController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminGalleryController::class, 'update'])->name('update');
         Route::delete('/{id}', [AdminGalleryController::class, 'destroy'])->name('destroy');
     });
 });

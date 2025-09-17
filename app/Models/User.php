@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Gallery::class, 'user_id');
     }
+
+    public function downloads()
+    {
+        return $this->hasMany(Download::class, 'user_id');
+    }
 }

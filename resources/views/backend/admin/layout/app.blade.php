@@ -29,52 +29,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const toggleIcon = document.getElementById('sidebarToggleIcon');
-            const collapsedLogo = sidebar.querySelector('.collapsed-logo');
-            const brandText = sidebar.querySelector('.sidebar-brand-text');
-            const sidebarTexts = sidebar.querySelectorAll('.sidebar-text');
-
-            // Apply saved state
-            const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-            if (isCollapsed) collapseSidebar();
-
-            // Toggle handler
-            toggleBtn.addEventListener('click', function () {
-                if (sidebar.classList.contains('collapsed')) {
-                    expandSidebar();
-                    localStorage.setItem('sidebar-collapsed', 'false');
-                } else {
-                    collapseSidebar();
-                    localStorage.setItem('sidebar-collapsed', 'true');
-                }
-            });
-
-            function collapseSidebar() {
-                sidebar.classList.add('collapsed');
-                toggleIcon.classList.remove('bi-chevron-double-left');
-                toggleIcon.classList.add('bi-chevron-double-right');
-
-                if (collapsedLogo) collapsedLogo.classList.remove('d-none');
-                if (brandText) brandText.classList.add('d-none');
-                sidebarTexts.forEach(el => el.classList.add('d-none'));
-            }
-
-            function expandSidebar() {
-                sidebar.classList.remove('collapsed');
-                toggleIcon.classList.remove('bi-chevron-double-right');
-                toggleIcon.classList.add('bi-chevron-double-left');
-
-                if (collapsedLogo) collapsedLogo.classList.add('d-none');
-                if (brandText) brandText.classList.remove('d-none');
-                sidebarTexts.forEach(el => el.classList.remove('d-none'));
-            }
-        });
-    </script>
-
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
     @yield('scripts')

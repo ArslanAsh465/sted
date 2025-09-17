@@ -259,12 +259,12 @@
                 <div class="collapse {{ request()->routeIs('admin.downloads.*') ? 'show' : '' }}" id="downloadsMenu">
                     <ul class="nav flex-column ms-4">
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.downloads.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.downloads.index') }}" class="nav-link {{ request()->routeIs('admin.downloads.index') ? 'active' : '' }}">
                                 List Downloads
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('admin.downloads.create') ? 'active' : '' }}">
+                            <a href="{{ route('admin.downloads.create') }}" class="nav-link {{ request()->routeIs('admin.downloads.create') ? 'active' : '' }}">
                                 Create Download
                             </a>
                         </li>
@@ -312,7 +312,7 @@
 <style>
     /* Sidebar dynamic width & collapse */
     #sidebar {
-        width: 280px; /* expanded width */
+        width: 300px; /* expanded width */
         height: 100vh;
         flex-shrink: 0;
         display: flex;
@@ -321,7 +321,7 @@
         overflow: hidden;
     }
     #sidebar.collapsed {
-        width: 80px; /* collapsed width */
+        width: 100px; /* collapsed width */
     }
     #sidebar .sidebar-menu {
         overflow-y: auto;
@@ -369,3 +369,49 @@
         font-size: 0.925rem;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const toggleIcon = document.getElementById('sidebarToggleIcon');
+        const collapsedLogo = sidebar.querySelector('.collapsed-logo');
+        const brandText = sidebar.querySelector('.sidebar-brand-text');
+        const sidebarTexts = sidebar.querySelectorAll('.sidebar-text');
+
+        // Apply saved state
+        const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+        if (isCollapsed) collapseSidebar();
+
+        // Toggle handler
+        toggleBtn.addEventListener('click', function () {
+            if (sidebar.classList.contains('collapsed')) {
+                expandSidebar();
+                localStorage.setItem('sidebar-collapsed', 'false');
+            } else {
+                collapseSidebar();
+                localStorage.setItem('sidebar-collapsed', 'true');
+            }
+        });
+
+        function collapseSidebar() {
+            sidebar.classList.add('collapsed');
+            toggleIcon.classList.remove('bi-chevron-double-left');
+            toggleIcon.classList.add('bi-chevron-double-right');
+
+            if (collapsedLogo) collapsedLogo.classList.remove('d-none');
+            if (brandText) brandText.classList.add('d-none');
+            sidebarTexts.forEach(el => el.classList.add('d-none'));
+        }
+
+        function expandSidebar() {
+            sidebar.classList.remove('collapsed');
+            toggleIcon.classList.remove('bi-chevron-double-right');
+            toggleIcon.classList.add('bi-chevron-double-left');
+
+            if (collapsedLogo) collapsedLogo.classList.add('d-none');
+            if (brandText) brandText.classList.remove('d-none');
+            sidebarTexts.forEach(el => el.classList.remove('d-none'));
+        }
+    });
+</script>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\News;
+use App\Models\Download;
 use App\Models\Gallery;
 
 class HomeController extends Controller
@@ -52,7 +53,19 @@ class HomeController extends Controller
     // Downloads Page
     public function downloads()
     {
-        return view('frontend.downloads');
+        $today = Carbon::today()->toDateString();
+
+        $this->data['downloads'] = Download::where('status', '1')
+            ->where(function ($query) use ($today) {
+                $query->whereNull('start_time')->orWhere('start_time', '<=', $today);
+            })
+            ->where(function ($query) use ($today) {
+                $query->whereNull('end_time')->orWhere('end_time', '>=', $today);
+            })
+            ->latest()
+            ->get();
+
+        return view('frontend.downloads', $this->data);
     }
 
     // Gallery Page
