@@ -27,7 +27,7 @@ class AdminModeratorsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|min:5',
             'email'    => 'required|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -44,6 +44,13 @@ class AdminModeratorsController extends Controller
             ->with('alert_message', 'Moderator created successfully.');
     }
 
+    public function show($id)
+    {
+        $this->data['moderator'] = User::where('role', Constants::ROLE_MODERATOR)->findOrFail($id);
+
+        return view('backend.admin.moderators.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['moderator'] = User::where('role', Constants::ROLE_MODERATOR)->findOrFail($id);
@@ -56,7 +63,7 @@ class AdminModeratorsController extends Controller
         $moderator = User::where('role', Constants::ROLE_MODERATOR)->findOrFail($id);
 
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|min:5',
             'email'    => 'required|email|unique:users,email,' . $moderator->id,
             'password' => 'nullable|string|min:6|confirmed',
         ]);

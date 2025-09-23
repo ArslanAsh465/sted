@@ -4,76 +4,87 @@
 
 @section('content')
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 row">
-        <div class="col-md-9">
-            <h1 class="h3 mb-0">Gallery</h1>
-        </div>
+    <div class="mb-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+            </ol>
+        </nav>
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-9">
+                <h1 class="h3 mb-0">Gallery</h1>
+            </div>
 
-        <div class="col-md-3 text-md-end">
-            <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary">
-                Add New Gallery
-            </a>
+            <div class="col-md-3 text-md-end mt-2 mt-md-0">
+                <a href="{{ route('admin.gallery.create') }}" class="btn btn-sm btn-primary" Title="Add New Gallery Image">
+                    <i class="bi bi-plus-circle me-1"></i> Add
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Gallery Table -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5 class="mb-0">Uploaded Images</h5>
-        </div>
+    <div class="mt-4 shadow rounded p-3 bg-white">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Upload by</th>
+                        <th class="d-none d-lg-table-cell">Image</th>
+                        <th>Status</th>
+                        <th class="d-none d-lg-table-cell">Start Time</th>
+                        <th class="d-none d-lg-table-cell">End Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($galleries as $gallery)
+                        <tr>
+                            <td>{{ $gallery->title }}</td>
+                            <td>{{ $gallery->user->username }}</td>
+                            <td class="d-none d-lg-table-cell">
+                                @if($gallery->image_path)
+                                    <img src="{{ asset('storage/' . $gallery->image_path) }}" alt="Gallery Image" style="width: 100px; height: auto;">
+                                @else
+                                    <span>-</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge {{ $gallery->status === '1' ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ $gallery->status === '1' ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($gallery->start_time)->format('M d, Y') }}</td>
+                            <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($gallery->end_time)->format('M d, Y') }}</td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end align-items-center gap-2">
+                                    <a href="{{ route('admin.gallery.show', $gallery->id) }}" class="text-secondary" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
 
-        <div class="card-body">
-            @if($galleries->isEmpty())
-                <p>No gallery images found.</p>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped align-middle text-center">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Upload by</th>
-                                <th>Image</th>
-                                <th>Status</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($galleries as $gallery)
-                                <tr>
-                                    <td>{{ $gallery->id }}</td>
-                                    <td>{{ $gallery->title }}</td>
-                                    <td>{{ $gallery->user->username }}</td>
-                                    <td>
-                                        @if($gallery->image_path)
-                                            <img src="{{ asset('storage/' . $gallery->image_path) }}" alt="Gallery Image" style="width: 100px; height: auto;">
-                                        @else
-                                            <span>-</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="badge {{ $gallery->status === '1' ? 'bg-success' : 'bg-secondary' }}">
-                                            {{ $gallery->status === '1' ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($gallery->start_time)->format('M d, Y') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($gallery->end_time)->format('M d, Y') }}</td>
-                                    <td>
-                                        {{-- No edit for images (per your setup) --}}
-                                        <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" class="delete-gallery-form" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+                                    <a href="{{ route('admin.gallery.edit', $gallery->id) }}" class="text-primary" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" class="delete-gallery-form" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button  class="btn p-0 border-0 bg-transparent text-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">No gallery images found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 

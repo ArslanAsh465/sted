@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Page Header -->
-    <div class="mb-4">
+    <div class="mb-2">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
@@ -16,82 +16,81 @@
                 <h1 class="h3 mb-0">Download Files</h1>
             </div>
 
-            <div class="col-md-3 text-md-end">
-                <a href="{{ route('admin.downloads.create') }}" class="btn btn-primary" Title="Add New Download File">
-                    Add
-                    <i class="bi bi-plus-circle"></i>
+            <div class="col-md-3 text-md-end mt-2 mt-md-0">
+                <a href="{{ route('admin.downloads.create') }}" class="btn btn-sm btn-primary" Title="Add New Download File">
+                    <i class="bi bi-plus-circle me-1"></i> Add
                 </a>
             </div>
         </div>
     </div>
 
     <!-- Downloads Table -->
-    <div class="mt-4 shadow-lg">
-        @if($downloads->isEmpty())
-            <p>No download files found.</p>
-        @else
-            <div class="table-responsive p-2">
-                <table class="table">
-                    <thead>
+    <div class="mt-4 shadow-lg p-3">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th class="d-none d-lg-table-cell">Uploaded by</th>
+                        <th>File</th>
+                        <th>Status</th>
+                        <th class="d-none d-lg-table-cell">Start Time</th>
+                        <th class="d-none d-lg-table-cell">End Time</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($downloads as $item)
                         <tr>
-                            <th>Title</th>
-                            <th>Uploaded by</th>
-                            <th>File</th>
-                            <th>Status</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($downloads as $item)
-                            <tr>
-                                <td>{{ $item->title }}</td>
-                                <td>{{ $item->user->username }}</td>
-                                <td>
-                                    <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="text-primary" title="Download {{ $item->title }}">
-                                        <i class="bi bi-download"></i>
+                            <td>{{ $item->title }}</td>
+                            <td class="d-none d-lg-table-cell">{{ $item->user->username }}</td>
+                            <td>
+                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="text-primary" title="Download {{ $item->title }}">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge {{ $item->status === '1' ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ $item->status === '1' ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($item->start_time)->format('M d, Y') }}</td>
+                            <td class="d-none d-lg-table-cell">{{ \Carbon\Carbon::parse($item->end_time)->format('M d, Y') }}</td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end align-items-center gap-2">
+                                    <a href="{{ route('admin.downloads.show', $item->id) }}" class="text-secondary" title="View">
+                                        <i class="bi bi-eye"></i>
                                     </a>
-                                </td>
-                                <td>
-                                    <span class="badge {{ $item->status === '1' ? 'bg-success' : 'bg-secondary' }}">
-                                        {{ $item->status === '1' ? 'Active' : 'Inactive' }}
-                                    </span>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($item->start_time)->format('M d, Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($item->end_time)->format('M d, Y') }}</td>
-                                <td class="text-end">
-                                    <div class="d-flex justify-content-end align-items-center gap-2">
-                                        <a href="{{ route('admin.downloads.show', $item->id) }}" class="text-secondary" title="View">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
 
-                                        <a href="{{ route('admin.downloads.edit', $item->id) }}" class="text-primary" title="Edit">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                    <a href="{{ route('admin.downloads.edit', $item->id) }}" class="text-primary" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
 
-                                        <form action="{{ route('admin.downloads.destroy', $item->id) }}" method="POST" class="delete-download-form d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button  class="btn p-0 border-0 bg-transparent text-danger" title="Delete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                                    <form action="{{ route('admin.downloads.destroy', $item->id) }}" method="POST" class="delete-download-form d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn p-0 border-0 bg-transparent text-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No downloads available.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- SweetAlert notification --}}
     @include('backend.alert')
 @endsection
 
-@section('scripts')
+@section('footer')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.delete-download-form').forEach(function (form) {

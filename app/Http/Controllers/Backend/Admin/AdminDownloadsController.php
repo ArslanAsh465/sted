@@ -58,16 +58,16 @@ class AdminDownloadsController extends Controller
 
     public function show($id)
     {
-        $download = Download::with('user')->findOrFail($id);
+        $this->data['download'] = Download::with('user')->findOrFail($id);
 
-        return view('backend.admin.downloads.show', compact('download'));
+        return view('backend.admin.downloads.show', $this->data);
     }
 
     public function edit($id)
     {
-        $download = Download::findOrFail($id);
+        $this->data['download'] = Download::findOrFail($id);
 
-        return view('backend.admin.downloads.edit', compact('download'));
+        return view('backend.admin.downloads.edit', $this->data);
     }
 
     public function update(Request $request, $id)

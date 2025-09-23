@@ -1,6 +1,6 @@
 @extends('backend.admin.layout.app')
 
-@section('title', "Add New Download File")
+@section('title', "Add Download File")
 
 @section('content')
     <!-- Page Header -->
@@ -8,29 +8,22 @@
         <div class="col-md-9">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('admin.downloads.index') }}" class="text-decoration-none">Download Files</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Add New File</li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.downloads.index') }}" class="text-decoration-none">Download Files</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Download File</li>
                 </ol>
             </nav>
-            <h1 class="h3 mb-0">Add New Download File</h1>
+            <h1 class="h3 mb-0">Add Download File</h1>
         </div>
     </div>
 
     <!-- Create Download File Form -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5 class="mb-0">Download File Details</h5>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('admin.downloads.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+    <div class="mt-4 shadow rounded p-3 bg-white">
+        <form action="{{ route('admin.downloads.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-                <div class="mb-3">
+            <div class="row g-3">
+                <div class="col-12">
                     <label for="title" class="form-label">File Title</label>
                     <input type="text" name="title" id="title" value="{{ old('title') }}" class="form-control @error('title') is-invalid @enderror" required autofocus>
                     @error('title')
@@ -38,7 +31,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="col-12">
                     <label for="description" class="form-label">Description</label>
                     <textarea name="description" id="description" rows="5" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
                     @error('description')
@@ -46,7 +39,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="col-md-6 col-lg-3">
                     <label for="file_path" class="form-label">Upload File</label>
                     <input type="file" name="file_path" id="file_path" class="form-control @error('file_path') is-invalid @enderror" required>
                     @error('file_path')
@@ -54,7 +47,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="col-md-6 col-lg-3">
                     <label for="status" class="form-label">Status</label>
                     <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                         <option value="1" {{ old('status') === '1' ? 'selected' : '' }}>Active</option>
@@ -65,7 +58,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="col-md-6 col-lg-3">
                     <label for="start_time" class="form-label">Start Time</label>
                     <input type="date" name="start_time" id="start_time" value="{{ old('start_time') }}" class="form-control @error('start_time') is-invalid @enderror" required>
                     @error('start_time')
@@ -73,7 +66,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <div class="col-md-6 col-lg-3">
                     <label for="end_time" class="form-label">End Time</label>
                     <input type="date" name="end_time" id="end_time" value="{{ old('end_time') }}" class="form-control @error('end_time') is-invalid @enderror" required>
                     @error('end_time')
@@ -81,16 +74,15 @@
                     @enderror
                 </div>
 
-                <button class="btn btn-primary">Add Download File</button>
-            </form>
-        </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-primary">Add Download File</button>
+                </div>
+            </div>
+        </form>
     </div>
-
-    {{-- SweetAlert notification --}}
-    @include('backend.alert')
 @endsection
 
-@section('scripts')
+@section('footer')
     <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
 
     <script>

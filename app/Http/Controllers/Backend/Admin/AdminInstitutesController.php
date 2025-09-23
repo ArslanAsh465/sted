@@ -35,15 +35,15 @@ class AdminInstitutesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255|unique:users,username',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
+            'username'            => 'required|string|max:255|unique:users,username',
+            'email'               => 'required|email|unique:users,email',
+            'password'            => 'required|string|min:6|confirmed',
 
             'name'                => 'required|string|max:255',
             'principal_name'      => 'required|string|max:255',
             'mobile_no'           => 'required|string|max:20',
             'whatsapp_no'         => 'nullable|string|max:20',
-            'website' => ['nullable', 'max:255', 'regex:/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-\.~!$&\'()*+,;=:@%]*)*$/'],
+            'website'             => ['nullable', 'max:255', 'regex:/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-\.~!$&\'()*+,;=:@%]*)*$/'],
 
             'address'             => 'required|string|max:500',
             'city_id'             => 'required|integer|exists:cities,id',
@@ -81,6 +81,13 @@ class AdminInstitutesController extends Controller
             ->with('alert_message', 'Institute user and profile created successfully.');
     }
 
+    public function show($id)
+    {
+        $this->data['institute'] = User::with('institute')->where('role', Constants::ROLE_INSTITUTE)->findOrFail($id);
+
+        return view('backend.admin.institutes.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['countries'] = Country::all();
@@ -100,16 +107,19 @@ class AdminInstitutesController extends Controller
             'username'           => 'required|string|max:255',
             'email'              => 'required|email|unique:users,email,' . $instituteUser->id,
             'password'           => 'nullable|string|min:6|confirmed',
+
             'name'               => 'required|string|max:255',
             'principal_name'     => 'required|string|max:255',
             'mobile_no'          => 'required|string|max:20',
             'whatsapp_no'        => 'nullable|string|max:20',
             'website'            => ['nullable', 'max:255', 'regex:/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-\.~!$&\'()*+,;=:@%]*)*$/'],
+
             'address'            => 'required|string',
             'city_id'            => 'required|integer|exists:cities,id',
             'state_id'           => 'required|integer|exists:states,id',
             'country_id'         => 'required|integer|exists:countries,id',
             'postal_code'        => 'required|string|max:20',
+
             'registration_number'=> 'nullable|string|max:100',
         ]);
 

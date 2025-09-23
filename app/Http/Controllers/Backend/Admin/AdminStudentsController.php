@@ -43,7 +43,6 @@ class AdminStudentsController extends Controller
             'parent_id'   => 'required|exists:users,id',
             'first_name'  => 'required|string|max:255',
             'last_name'   => 'required|string|max:255',
-            'phone'       => 'required|string|max:20',
             'roll_no'     => 'required|string|max:50|unique:student_profiles,roll_no',
             'date_of_birth' => 'required|date',
 
@@ -66,7 +65,6 @@ class AdminStudentsController extends Controller
         $studentProfile->parent_id = $request->parent_id;
         $studentProfile->first_name = $request->first_name;
         $studentProfile->last_name = $request->last_name;
-        $studentProfile->phone = $request->phone;
         $studentProfile->roll_no = $request->roll_no;
         $studentProfile->date_of_birth = $request->date_of_birth;
         $studentProfile->address = $request->address;
@@ -79,6 +77,13 @@ class AdminStudentsController extends Controller
         return redirect()->route('admin.students.index')
             ->with('alert_type', 'success')
             ->with('alert_message', 'Student user and profile created successfully.');
+    }
+
+    public function show($id)
+    {
+        $this->data['student'] = User::with('student')->where('role', Constants::ROLE_STUDENT)->findOrFail($id);
+
+        return view('backend.admin.students.show', $this->data);
     }
 
     public function edit($id)
@@ -105,7 +110,6 @@ class AdminStudentsController extends Controller
             'parent_id'    => 'required|exists:users,id',
             'first_name'   => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
-            'phone'       => 'required|string|max:20',
             'roll_no'      => 'required|string|max:50|unique:student_profiles,roll_no,' . ($studentUser->studentProfile->id ?? 'NULL'),
             'date_of_birth' => 'required|date',
 
@@ -131,7 +135,6 @@ class AdminStudentsController extends Controller
             'parent_id',
             'first_name',
             'last_name',
-            'phone',
             'roll_no',
             'date_of_birth',
             'address',

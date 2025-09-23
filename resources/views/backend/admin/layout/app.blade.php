@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'STED')</title>
 
     <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
@@ -14,8 +15,12 @@
 
     <!-- SweetAlert2 -->
     <script src="{{ asset('assets/js/sweetalert2.min.js') }}"></script>
+
+    @yield('header')
 </head>
 <body style="background-color: {{ \App\Helpers\Colors::APP_BG_CLR }};">
+
+    @include('backend.admin.layout.mobile-navbar')
 
     <div class="d-flex" style="min-height: 100vh;">
         @include('backend.admin.layout.sidebar')
@@ -31,6 +36,6 @@
 
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
-    @yield('scripts')
+    @yield('footer')
 </body>
 </html>

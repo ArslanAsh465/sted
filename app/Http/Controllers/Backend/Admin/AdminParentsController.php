@@ -74,6 +74,13 @@ class AdminParentsController extends Controller
             ->with('alert_message', 'Parent user and profile created successfully.');
     }
 
+    public function show($id)
+    {
+        $this->data['parent'] = User::with('parent')->where('role', Constants::ROLE_PARENT)->findOrFail($id);
+
+        return view('backend.admin.parents.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['countries'] = Country::all();

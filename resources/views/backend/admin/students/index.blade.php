@@ -1,87 +1,102 @@
 @extends('backend.admin.layout.app')
 
-@section('title', 'Students Data')
+@section('title', 'Students')
 
 @section('content')
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 row">
-        <div class="col-md-9">
-            <h1 class="h3 mb-0">Students Data</h1>
-        </div>
+    <div class="mb-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Students</li>
+            </ol>
+        </nav>
 
-        <div class="col-md-3 text-md-end">
-            <a href="{{ route('admin.students.create') }}" class="btn btn-primary">
-                Add New Student
-            </a>
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-9">
+                <h1 class="h3 mb-0">Students</h1>
+            </div>
+            <div class="col-md-3 text-md-end mt-2 mt-md-0">
+                <a href="{{ route('admin.students.create') }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Add Student
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Students Table -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5 class="mb-0">List of Students</h5>
-        </div>
-
-        <div class="card-body">
-            @if($students->isEmpty())
-                <p>No students found.</p>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
+    <div class="mt-4 shadow rounded p-3 bg-white">
+        @if($students->isEmpty())
+            <p class="mb-0">No students found.</p>
+        @else
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>SSID</th>
+                            <th>Roll No</th>
+                            <th>First Name</th>
+                            <th class="d-none d-lg-table-cell">Last Name</th>
+                            <th class="d-none d-lg-table-cell">Email</th>
+                            <th>Parent</th>
+                            <th class="d-none d-lg-table-cell">DOB</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($students as $student)
+                            @php
+                                $profile = $student->student;
+                                $parent = $profile->parent ?? null;
+                            @endphp
                             <tr>
-                                <th>ID</th>
-                                <th>SSID</th>
-                                <th>Roll No</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Parent</th>
-                                <th>Date of Birth</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($students as $student)
-                                <tr>
-                                    <td>{{ $student->id }}</td>
-                                    <td>{{ $student->student->ssid ?? '-' }}</td>
-                                    <td>{{ $student->student->roll_no ?? '-' }}</td>
-                                    <td>{{ $student->student->first_name ?? '-' }}</td>
-                                    <td>{{ $student->student->last_name ?? '-' }}</td>
-                                    <td>{{ $student->email }}</td>
-                                    <td>
-                                        {{ $student->student->parent->first_name ?? '-' }}
-                                        {{ $student->student->parent->last_name ?? '' }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($student->student->date_of_birth)->format('Y-m-d') ?? '-' }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <td>{{ $profile->ssid ?? '-' }}</td>
+                                <td>{{ $profile->roll_no ?? '-' }}</td>
+                                <td>{{ $profile->first_name ?? '-' }}</td>
+                                <td class="d-none d-lg-table-cell">{{ $profile->last_name ?? '-' }}</td>
+                                <td class="d-none d-lg-table-cell">{{ $student->email ?? '-' }}</td>
+                                <td>
+                                    {{ $parent?->first_name }} {{ $parent?->last_name }}
+                                </td>
+                                <td class="d-none d-lg-table-cell">
+                                    {{ $profile->date_of_birth ? \Carbon\Carbon::parse($profile->date_of_birth)->format('Y-m-d') : '-' }}
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="{{ route('admin.students.show', $student->id) }}" class="text-secondary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
 
-                                        <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" style="display:inline-block;" class="delete-student-form">
+                                        <a href="{{ route('admin.students.edit', $student->id) }}" class="text-primary" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="delete-student-form d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="submit" class="btn p-0 border-0 bg-transparent text-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 
-    {{-- SweetAlert notification --}}
+    {{-- SweetAlert Notification --}}
     @include('backend.alert')
 @endsection
 
-@section('scripts')
+@section('footer')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.delete-student-form').forEach(function(form) {
-                form.addEventListener('submit', function(e) {
+            document.querySelectorAll('.delete-student-form').forEach(function (form) {
+                form.addEventListener('submit', function (e) {
                     e.preventDefault();
 
                     Swal.fire({

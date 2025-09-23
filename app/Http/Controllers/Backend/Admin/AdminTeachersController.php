@@ -36,7 +36,7 @@ class AdminTeachersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255|unique:users,username',
+            'username' => 'required|string|min:5|unique:users,username',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
 
@@ -81,6 +81,13 @@ class AdminTeachersController extends Controller
             ->with('alert_message', 'Teacher user and profile created successfully.');
     }
 
+    public function show($id)
+    {
+        $this->data['teacher'] = User::with('teacher')->where('role', Constants::ROLE_TEACHER)->findOrFail($id);
+
+        return view('backend.admin.teachers.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['institutes'] = User::with('institute')->where('role', Constants::ROLE_INSTITUTE)->get();
@@ -98,7 +105,7 @@ class AdminTeachersController extends Controller
         $teacherUser = User::where('role', Constants::ROLE_TEACHER)->findOrFail($id);
 
         $request->validate([
-            'username'       => 'required|string|max:255|unique:users,username,' . $teacherUser->id,
+            'username'       => 'required|string|min:5|unique:users,username,' . $teacherUser->id,
             'email'          => 'required|email|unique:users,email,' . $teacherUser->id,
             'password'       => 'nullable|string|min:6|confirmed',
 

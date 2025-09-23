@@ -1,82 +1,95 @@
 @extends('backend.admin.layout.app')
 
-@section('title', "Moderator's Data")
+@section('title', "Moderators")
 
 @section('content')
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 row">
-        <div class="col-md-9">
-            <h1 class="h3 mb-0">Moderator's Data</h1>
-        </div>
+    <div class="mb-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Moderators</li>
+            </ol>
+        </nav>
 
-        <div class="col-md-3 text-md-end">
-            <a href="{{ route('admin.moderators.create') }}" class="btn btn-primary">
-                Add New Moderator
-            </a>
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-9">
+                <h1 class="h3 mb-0">Moderators</h1>
+            </div>
+
+            <div class="col-md-3 text-md-end mt-2 mt-md-0">
+                <a href="{{ route('admin.moderators.create') }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Add
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Moderators Table -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5 class="mb-0">List of Moderators</h5>
-        </div>
-
-        <div class="card-body">
-            @if($moderators->isEmpty())
-                <p>No moderators found.</p>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
+    <div class="mt-4 shadow rounded p-3 bg-white">
+        @if($moderators->isEmpty())
+            <p>No moderator users found.</p>
+        @else
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th class="d-none d-lg-table-cell">Email Verified</th>
+                            <th>Verified</th>
+                            <th class="d-none d-lg-table-cell">Registered</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($moderators as $moderator)
                             <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Email Verified</th>
-                                <th>Verified</th>
-                                <th>Registered</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($moderators as $moderator)
-                                <tr>
-                                    <td>{{ $moderator->id }}</td>
-                                    <td>{{ $moderator->username }}</td>
-                                    <td>{{ $moderator->email }}</td>
-                                    <td>{{ $moderator->email_verified_at ? $moderator->email_verified_at->diffForHumans() : 'Not Verified' }}</td>
-                                    <td>{{ $moderator->is_verified ? 'Yes' : 'No' }}</td>
-                                    <td>{{ $moderator->created_at->diffForHumans() }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.moderators.edit', $moderator->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <td>{{ $moderator->username }}</td>
+                                <td>{{ $moderator->email }}</td>
+                                <td class="d-none d-lg-table-cell">
+                                    {{ $moderator->email_verified_at ? $moderator->email_verified_at->diffForHumans() : 'Not Verified' }}
+                                </td>
+                                <td>{{ $moderator->is_verified ? 'Yes' : 'No' }}</td>
+                                <td class="d-none d-lg-table-cell">{{ $moderator->created_at->diffForHumans() }}</td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end align-items-center gap-2">
+                                        <a href="{{ route('admin.moderators.show', $moderator->id) }}" class="text-secondary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
 
-                                        <form action="{{ route('admin.moderators.destroy', $moderator->id) }}" method="POST" style="display:inline-block;" class="delete-moderator-form">
+                                        <a href="{{ route('admin.moderators.edit', $moderator->id) }}" class="text-primary" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <form action="{{ route('admin.moderators.destroy', $moderator->id) }}" method="POST" class="delete-moderator-form d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="submit" class="btn p-0 border-0 bg-transparent text-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 
     {{-- SweetAlert notification --}}
     @include('backend.alert')
 @endsection
 
-@section('scripts')
+@section('footer')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.delete-moderator-form').forEach(function(form) {
-                form.addEventListener('submit', function(e) {
+            document.querySelectorAll('.delete-moderator-form').forEach(function (form) {
+                form.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    
+
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "This action cannot be undone!",

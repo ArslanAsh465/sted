@@ -27,3 +27,17 @@
         </ul>
     </div>
 </nav>
+
+<style>
+    @media (max-width: 767.98px) {
+        #main-navbar {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        #main-navbar {
+            display: flex !important; /* navbar uses flex by default */
+        }
+    }
+</style>

@@ -14,7 +14,7 @@ class AdminNewsController extends Controller
 
     public function index()
     {
-        $this->data['news'] = News::latest()->get();
+        $this->data['news'] = News::with('user')->latest()->get();
 
         return view('backend.admin.news.index', $this->data);
     }
@@ -28,11 +28,11 @@ class AdminNewsController extends Controller
     {
         $request->validate([
             'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'image'       => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status'      => 'required|in:0,1',
-            'start_time'  => 'nullable|date',
-            'end_time'    => 'nullable|date|after_or_equal:start_time',
+            'start_time'  => 'required|date',
+            'end_time'    => 'required|date|after_or_equal:start_time',
         ]);
 
         $path = null;
@@ -55,15 +55,65 @@ class AdminNewsController extends Controller
             ->with('alert_message', 'News added successfully.');
     }
 
-    public function destroy($id)
+    public function show($id)
     {
-        $gallery = Gallery::findOrFail($id);
+        $this->data['news'] = News::with('user')->findOrFail($id);
 
-        if (Storage::disk('public')->exists($gallery->image_path)) {
-            Storage::disk('public')->delete($gallery->image_path);
+        return view('backend.admin.news.show', $this->data);
+    }
+
+    public function edit($id)
+    {
+        $this->data['news'] = News::findOrFail($id);
+
+        return view('backend.admin.news.edit', $this->data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $news = News::findOrFail($id);
+
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status'      => 'required|in:0,1',
+            'start_time'  => 'required|date',
+            'end_time'    => 'required|date|after_or_equal:start_time',
+        ]);
+
+        $data = [
+            'title'       => $request->title,
+            'description' => $request->description,
+            'status'      => $request->status,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($news->image_path && Storage::disk('public')->exists($news->image_path)) {
+                Storage::disk('public')->delete($news->image_path);
+            }
+
+            $data['image_path'] = $request->file('image')->store('news', 'public');
         }
 
-        $gallery->delete();
+        $news->update($data);
+
+        return redirect()->route('admin.news.index')
+            ->with('alert_type', 'success')
+            ->with('alert_message', 'News updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $news = News::findOrFail($id);
+
+        if ($news->image_path && Storage::disk('public')->exists($news->image_path)) {
+            Storage::disk('public')->delete($news->image_path);
+        }
+
+        $news->delete();
 
         return redirect()->back()
             ->with('alert_type', 'success')

@@ -27,7 +27,7 @@ class AdminAdminsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username'     => 'required|string|max:255',
+            'username'     => 'required|string|min:5',
             'email'    => 'required|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -44,6 +44,13 @@ class AdminAdminsController extends Controller
             ->with('alert_message', 'Admin created successfully.');
     }
 
+    public function show($id)
+    {
+        $this->data['admin'] = User::where('role', Constants::ROLE_ADMIN)->findOrFail($id);
+
+        return view('backend.admin.admins.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['admin'] = User::where('role', Constants::ROLE_ADMIN)->findOrFail($id);
@@ -56,7 +63,7 @@ class AdminAdminsController extends Controller
         $admin = User::where('role', Constants::ROLE_ADMIN)->findOrFail($id);
 
         $request->validate([
-            'username'     => 'required|string|max:255',
+            'username'     => 'required|string|min:5',
             'email'    => 'required|email|unique:users,email,' . $admin->id,
             'password' => 'nullable|string|min:6|confirmed',
         ]);

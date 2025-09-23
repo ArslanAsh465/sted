@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\AuthController;
+
 // Admin Controller
 use App\Http\Controllers\Backend\Admin\AdminDashboardController;
 use App\Http\Controllers\Backend\Admin\AdminAdminsController;
@@ -52,87 +53,31 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
 
     // Admins
-    Route::prefix('admins')->name('admins.')->group(function () {
-        Route::get('/', [AdminAdminsController::class, 'index'])->name('index');
-        Route::get('/create', [AdminAdminsController::class, 'create'])->name('create');
-        Route::post('/', [AdminAdminsController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminAdminsController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminAdminsController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminAdminsController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('admins', AdminAdminsController::class)->names('admins');
 
     // Moderators
-    Route::prefix('moderators')->name('moderators.')->group(function () {
-        Route::get('/', [AdminModeratorsController::class, 'index'])->name('index');
-        Route::get('/create', [AdminModeratorsController::class, 'create'])->name('create');
-        Route::post('/', [AdminModeratorsController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminModeratorsController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminModeratorsController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminModeratorsController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('moderators', AdminModeratorsController::class)->names('moderators');
 
     // Institutes
-    Route::prefix('institutes')->name('institutes.')->group(function () {
-        Route::get('/', [AdminInstitutesController::class, 'index'])->name('index');
-        Route::get('/create', [AdminInstitutesController::class, 'create'])->name('create');
-        Route::post('/', [AdminInstitutesController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminInstitutesController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminInstitutesController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminInstitutesController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('institutes', AdminInstitutesController::class)->names('institutes');
 
     // Teachers
-    Route::prefix('teachers')->name('teachers.')->group(function () {
-        Route::get('/', [AdminTeachersController::class, 'index'])->name('index');
-        Route::get('/create', [AdminTeachersController::class, 'create'])->name('create');
-        Route::post('/', [AdminTeachersController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminTeachersController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminTeachersController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminTeachersController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('teachers', AdminTeachersController::class)->names('teachers');
 
     // Parents
-    Route::prefix('parents')->name('parents.')->group(function () {
-        Route::get('/', [AdminParentsController::class, 'index'])->name('index');
-        Route::get('/create', [AdminParentsController::class, 'create'])->name('create');
-        Route::post('/', [AdminParentsController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminParentsController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminParentsController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminParentsController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('parents', AdminParentsController::class)->names('parents');
 
     // Students
-    Route::prefix('students')->name('students.')->group(function () {
-        Route::get('/', [AdminStudentsController::class, 'index'])->name('index');
-        Route::get('/create', [AdminStudentsController::class, 'create'])->name('create');
-        Route::post('/', [AdminStudentsController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminStudentsController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminStudentsController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminStudentsController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('students', AdminStudentsController::class)->names('students');
 
     // News
-    Route::prefix('news')->name('news.')->group(function () {
-        Route::get('/', [AdminNewsController::class, 'index'])->name('index');
-        Route::get('/create', [AdminNewsController::class, 'create'])->name('create');
-        Route::post('/', [AdminNewsController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminNewsController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminNewsController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminNewsController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('news', AdminNewsController::class)->names('news');
 
     // Downloads
     Route::resource('downloads', AdminDownloadsController::class)->names('downloads');
 
     // Gallery
-    Route::prefix('gallery')->name('gallery.')->group(function () {
-        Route::get('/', [AdminGalleryController::class, 'index'])->name('index');
-        Route::get('/create', [AdminGalleryController::class, 'create'])->name('create');
-        Route::post('/', [AdminGalleryController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AdminGalleryController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdminGalleryController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminGalleryController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('gallery', AdminGalleryController::class)->names('gallery');
 });
 
 // Moderator

@@ -27,32 +27,75 @@ class AdminGalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'       => 'required|string|max:255',
-            'images'      => 'required|array',
-            'images.*'    => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status'      => 'required|in:0,1',
-            'start_time'  => 'nullable|date',
-            'end_time'    => 'nullable|date|after_or_equal:start_time',
+            'title'      => 'required|string|max:255',
+            'image'      => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status'     => 'required|in:0,1',
+            'start_time' => 'required|date',
+            'end_time'   => 'required|date|after_or_equal:start_time',
         ]);
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('gallery', 'public');
+        $path = $request->file('image')->store('gallery', 'public');
 
-                Gallery::create([
-                    'user_id'      => auth()->id(),
-                    'title'        => $request->title,
-                    'image_path'   => $path,
-                    'status'       => $request->status,
-                    'start_time'   => $request->start_time,
-                    'end_time'     => $request->end_time,
-                ]);
-            }
-        }
+        Gallery::create([
+            'user_id'     => auth()->id(),
+            'title'       => $request->title,
+            'image_path'  => $path,
+            'status'      => $request->status,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
+        ]);
 
         return redirect()->route('admin.gallery.index')
             ->with('alert_type', 'success')
-            ->with('alert_message', 'Gallery images uploaded successfully.');
+            ->with('alert_message', 'Gallery image uploaded successfully.');
+    }
+
+    public function show($id)
+    {
+        $this->data['gallery'] = Gallery::with('user')->findOrFail($id);
+
+        return view('backend.admin.gallery.show', $this->data);
+    }
+
+    public function edit($id)
+    {
+        $this->data['gallery'] = Gallery::findOrFail($id);
+
+        return view('backend.admin.gallery.edit', $this->data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $gallery = Gallery::findOrFail($id);
+
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status'      => 'required|in:0,1',
+            'start_time'  => 'required|date',
+            'end_time'    => 'required|date|after_or_equal:start_time',
+        ]);
+
+        // Handle image replacement
+        if ($request->hasFile('image')) {
+            if ($gallery->image_path && Storage::disk('public')->exists($gallery->image_path)) {
+                Storage::disk('public')->delete($gallery->image_path);
+            }
+
+            $path = $request->file('image')->store('gallery', 'public');
+            $gallery->image_path = $path;
+        }
+
+        $gallery->title      = $request->title;
+        $gallery->status     = $request->status;
+        $gallery->start_time = $request->start_time;
+        $gallery->end_time   = $request->end_time;
+
+        $gallery->save();
+
+        return redirect()->route('admin.gallery.index')
+            ->with('alert_type', 'success')
+            ->with('alert_message', 'Gallery image updated successfully.');
     }
 
     public function destroy($id)
