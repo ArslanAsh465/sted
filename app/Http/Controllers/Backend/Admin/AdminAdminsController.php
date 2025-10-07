@@ -14,7 +14,7 @@ class AdminAdminsController extends Controller
 
     public function index()
     {
-        $this->data['admins'] = User::where('role', Constants::ROLE_ADMIN)->get();
+        $this->data['admins'] = User::where('role', Constants::ROLE_ADMIN)->latest()->get();
 
         return view('backend.admin.admins.index', $this->data);
     }

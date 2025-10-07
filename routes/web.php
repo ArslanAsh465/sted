@@ -12,6 +12,10 @@ use App\Http\Controllers\Backend\Admin\AdminInstitutesController;
 use App\Http\Controllers\Backend\Admin\AdminTeachersController;
 use App\Http\Controllers\Backend\Admin\AdminParentsController;
 use App\Http\Controllers\Backend\Admin\AdminStudentsController;
+use App\Http\Controllers\Backend\Admin\AdminClassesController;
+use App\Http\Controllers\Backend\Admin\AdminCentersController;
+use App\Http\Controllers\Backend\Admin\AdminExamCategoriesController;
+use App\Http\Controllers\Backend\Admin\AdminExamsController;
 use App\Http\Controllers\Backend\Admin\AdminNewsController;
 use App\Http\Controllers\Backend\Admin\AdminDownloadsController;
 use App\Http\Controllers\Backend\Admin\AdminGalleryController;
@@ -69,6 +73,24 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Students
     Route::resource('students', AdminStudentsController::class)->names('students');
+
+    // Classes
+    Route::resource('classes', AdminClassesController::class)->names('classes');
+
+    // Centers
+    Route::resource('centers', AdminCentersController::class)->names('centers');
+
+    // Exam Categories
+    Route::resource('exam-categories', AdminExamCategoriesController::class)->names('exam.categories');
+
+    // Exams
+    Route::resource('exams', AdminExamsController::class)->names('exams');
+
+    // Payments
+    Route::resource('payments', AdminExamsController::class)->names('payments');
+
+    // Registrations
+    Route::resource('registrations', AdminExamsController::class)->names('registrations');
 
     // News
     Route::resource('news', AdminNewsController::class)->names('news');

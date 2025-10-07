@@ -52,11 +52,18 @@
                     @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    @if ($news->image_path)
-                        <div class="mt-2">
-                            <img src="{{ asset('storage/' . $news->image_path) }}" alt="Current Image" style="max-width: 120px; height: auto; border-radius: 5px;">
-                        </div>
-                    @endif
+                    @php
+                        $imagePath = $news->image_path ? 'storage/' . $news->image_path : null;
+                        $imageExists = $imagePath && file_exists(public_path($imagePath));
+                    @endphp
+
+                    <div class="mt-2">
+                        @if ($imageExists)
+                            <img src="{{ asset($imagePath) }}" alt="Current Image" style="max-width: 120px; height: auto; border-radius: 5px;">
+                        @else
+                            <span class="text-danger small">No image added.</span>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Status -->

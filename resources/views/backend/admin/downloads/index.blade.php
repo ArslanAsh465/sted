@@ -45,9 +45,18 @@
                             <td>{{ $item->title }}</td>
                             <td class="d-none d-lg-table-cell">{{ $item->user->username }}</td>
                             <td>
-                                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="text-primary" title="Download {{ $item->title }}">
-                                    <i class="bi bi-download"></i>
-                                </a>
+                                @php
+                                    $filePath = $item->file_path ? 'storage/' . $item->file_path : null;
+                                    $fileExists = $filePath && file_exists(public_path($filePath));
+                                @endphp
+
+                                @if ($fileExists)
+                                    <a href="{{ asset($filePath) }}" target="_blank" class="text-primary" title="Download {{ $item->title }}">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                @else
+                                    <span class="text-danger small">No file</span>
+                                @endif
                             </td>
                             <td>
                                 <span class="badge {{ $item->status === '1' ? 'bg-success' : 'bg-secondary' }}">

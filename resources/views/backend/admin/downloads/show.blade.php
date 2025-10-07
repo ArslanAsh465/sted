@@ -64,7 +64,7 @@
                         <i class="bi bi-download me-1"></i> Download File
                     </a>
                 @else
-                    <span class="text-muted">No file available.</span>
+                    <span class="text-danger small">No file available.</span>
                 @endif
             </div>
         </div>

@@ -18,6 +18,7 @@ class ParentProfile extends Model
         'postal_code',
     ];
 
+    // Generate Parent STED ID
     protected static function boot()
     {
         parent::boot();

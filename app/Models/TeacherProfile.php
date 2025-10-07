@@ -21,6 +21,7 @@ class TeacherProfile extends Model
         'postal_code',
     ];
 
+    // Generate Teacher STED ID
     protected static function boot()
     {
         parent::boot();

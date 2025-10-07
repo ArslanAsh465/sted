@@ -18,7 +18,7 @@
             </div>
             <div class="col-md-3 text-md-end mt-2 mt-md-0">
                 <a href="{{ route('admin.students.create') }}" class="btn btn-sm btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i> Add Student
+                    <i class="bi bi-plus-circle me-1"></i> Add
                 </a>
             </div>
         </div>

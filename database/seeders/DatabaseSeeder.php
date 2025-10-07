@@ -20,7 +20,16 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(TestSeeder::class);
+        // Seeder for Country, States, Citites
         $this->call(LocationSeeder::class);
+
+        // Seeder for classes from Class 1 to Class 10
+        $this->call(ClassesSeeder::class);
+
+        // Seeder for Exam Categories
+        $this->call(ExamCategorySeeder::class);
+
+        // Test Seeder
+        $this->call(TestSeeder::class);
     }
 }

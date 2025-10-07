@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image_path');
-            $table->enum('status', ['0', '1'])->default('1');
+            $table->boolean('status')->default(false);
             $table->date('start_time');
             $table->date('end_time');
 

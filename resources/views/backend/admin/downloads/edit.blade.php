@@ -85,7 +85,7 @@
                             Download File
                         </a>
                     @else
-                        <span class="text-muted">No file uploaded.</span>
+                        <span class="text-danger small">No file uploaded.</span>
                     @endif
                 </div>
 

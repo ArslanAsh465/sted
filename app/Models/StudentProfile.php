@@ -21,6 +21,7 @@ class StudentProfile extends Model
         'postal_code',
     ];
 
+    // Generate Student STED ID
     protected static function boot()
     {
         parent::boot();

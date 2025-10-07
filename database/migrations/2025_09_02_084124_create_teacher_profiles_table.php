@@ -22,10 +22,11 @@ return new class extends Migration
             $table->string('phone');
             $table->string('qualification');
             $table->string('specialization');
+
             $table->string('address');
-            $table->integer('city_id');
-            $table->integer('state_id');
             $table->integer('country_id');
+            $table->integer('state_id');
+            $table->integer('city_id');
             $table->integer('postal_code');
 
             $table->timestamps();

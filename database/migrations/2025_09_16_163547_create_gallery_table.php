@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->string('image_path');
-            $table->enum('status', ['0', '1'])->default('1');
+            $table->boolean('status')->default(false);
             $table->date('start_time');
             $table->date('end_time');
 

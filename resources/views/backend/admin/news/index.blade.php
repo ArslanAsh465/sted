@@ -45,10 +45,15 @@
                             <td>{{ $item->title }}</td>
                             <td>{{ $item->user->username ?? '-' }}</td>
                             <td class="d-none d-lg-table-cell">
-                                @if($item->image_path)
-                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="News Image" style="width: 100px; height: auto; border-radius: 5px;">
+                                @php
+                                    $imagePath = $item->image_path ? 'storage/' . $item->image_path : null;
+                                    $imageExists = $imagePath && file_exists(public_path($imagePath));
+                                @endphp
+
+                                @if ($imageExists)
+                                    <img src="{{ asset($imagePath) }}" alt="News Image" style="width: 100px; height: auto; border-radius: 5px;">
                                 @else
-                                    <span class="text-muted">-</span>
+                                    <span class="text-danger small">No image</span>
                                 @endif
                             </td>
                             <td>

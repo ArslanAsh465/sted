@@ -33,7 +33,6 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>SPID</th>
                             <th>First Name</th>
                             <th class="d-none d-lg-table-cell">Last Name</th>
@@ -45,7 +44,6 @@
                     <tbody>
                         @foreach($parents as $parent)
                             <tr>
-                                <td>{{ $parent->id }}</td>
                                 <td>{{ $parent->parent->spid ?? '-' }}</td>
                                 <td>{{ $parent->parent->first_name ?? '-' }}</td>
                                 <td class="d-none d-lg-table-cell">{{ $parent->parent->last_name ?? '-' }}</td>
